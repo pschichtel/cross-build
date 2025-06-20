@@ -37,8 +37,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           platforms: linux/amd64
+          file: Dockerfile.osx
           push: ${{ github.ref_name == 'main' }}
-          tags: ghcr.io/pschichtel/osxcross/${{ matrix.arch }}:${{ steps.tag.outputs.container_tag }}
+          tags: ghcr.io/pschichtel/cross-build/osx/${{ matrix.arch }}:${{ steps.tag.outputs.container_tag }}
           build-args: |
             CROSS_TRIPLE=${{ matrix.arch }}-apple-darwin
           cache-from: type=gha
