@@ -14,9 +14,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    strategy:
-      matrix:
-        arch: ['x86_64', 'aarch64']
     steps:
       - uses: actions/checkout@v4
       - name: Log in to GitHub Container Registry
@@ -33,15 +30,13 @@ jobs:
           DATE=$(date +'%Y%m%d')
           SHORT_SHA=${GITHUB_SHA:0:7}
           echo "container_tag=${DATE}-${SHORT_SHA}" >> $GITHUB_OUTPUT
-      - name: Build and push ${{ matrix.arch }} image
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           platforms: linux/amd64
           file: Dockerfile.osx
           push: ${{ github.ref_name == 'main' }}
-          tags: ghcr.io/pschichtel/cross-build/osx/${{ matrix.arch }}:${{ steps.tag.outputs.container_tag }}
-          build-args: |
-            CROSS_TRIPLE=${{ matrix.arch }}-apple-darwin
+          tags: ghcr.io/pschichtel/cross-build/osx/:${{ steps.tag.outputs.container_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
   build-android:
