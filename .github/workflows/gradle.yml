@@ -49,17 +49,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    strategy:
-      matrix:
-        arch:
-          - triple: 'arm-linux-androideabi'
-            abi: armeabi-v7a
-          - triple: 'aarch64-linux-android'
-            abi: arm64-v8a
-          - triple: 'i686-linux-android'
-            abi: x86
-          - triple: 'x86_64-linux-android'
-            abi: x86_64
     steps:
       - uses: actions/checkout@v4
       - name: Log in to GitHub Container Registry
@@ -76,16 +65,13 @@ jobs:
           DATE=$(date +'%Y%m%d')
           SHORT_SHA=${GITHUB_SHA:0:7}
           echo "container_tag=${DATE}-${SHORT_SHA}" >> $GITHUB_OUTPUT
-      - name: Build and push ${{ matrix.arch }} image
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           platforms: linux/amd64
           file: Dockerfile.android
           push: ${{ github.ref_name == 'main' }}
-          tags: ghcr.io/pschichtel/cross-build/android/${{ matrix.arch.abi }}:${{ steps.tag.outputs.container_tag }}
-          build-args: |
-            CROSS_TRIPLE=${{ matrix.arch.triple }}
-            ANDROID_ABI=${{ matrix.arch.abi }}
+          tags: ghcr.io/pschichtel/cross-build/android:${{ steps.tag.outputs.container_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
