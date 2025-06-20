@@ -1,0 +1,33 @@
+FROM docker.io/library/alpine:3.21 AS ndk
+
+RUN apk add curl unzip
+
+ARG NDK_VERSION=r26d
+RUN curl -o /tmp/ndk.zip "https://dl.google.com/android/repository/android-ndk-${NDK_VERSION}-linux.zip" \
+ && unzip -q /tmp/ndk.zip -d /tmp/ \
+ && mv "/tmp/android-ndk-${NDK_VERSION}" /ndk \
+ && rm /tmp/ndk.zip
+
+FROM docker.io/library/debian:bookworm
+
+RUN apt update \
+ && apt full-upgrade \
+ && apt install -y python3 python3-pip cmake make
+
+RUN pip install --break-system-packages conan
+
+ENV ANDROID_NDK_ROOT="/ndk"
+
+COPY --from=ndk /ndk "${ANDROID_NDK_ROOT}"
+COPY entrypoint.sh /entrypoint.sh
+
+#ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD [ "bash" ]
+
+ARG CROSS_TRIPLE
+
+COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
+
+ENV CMAKE_TOOLCHAIN_FILE="/usr/x86_64-linux-android/Toolchain.cmake"
+
