@@ -27,5 +27,5 @@ CMD [ "bash" ]
 
 ENV CMAKE_TOOLCHAIN_FILE="${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake"
 
-COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
+#COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
 
