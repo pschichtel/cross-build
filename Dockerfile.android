@@ -28,7 +28,9 @@ CMD [ "bash" ]
 ARG CROSS_TRIPLE
 ARG ANDROID_ABI
 
-ENV ANDROID_STL="c++_shared" \
+ENV CROSS_TRIPLE="${CROSS_TRIPLE}" \
+    ANDROID_STL="c++_shared" \
+    ANDROID_ABI="${ANDROID_ABI}" \
     CMAKE_TOOLCHAIN_FILE="/ndk/build/cmake/android.toolchain.cmake"
 
 COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
