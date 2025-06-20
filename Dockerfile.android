@@ -29,5 +29,5 @@ ARG CROSS_TRIPLE
 
 COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
 
-ENV CMAKE_TOOLCHAIN_FILE="/usr/x86_64-linux-android/Toolchain.cmake"
+ENV CMAKE_TOOLCHAIN_FILE="/ndk/build/cmake/android.toolchain.cmake"
 
