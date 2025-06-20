@@ -26,8 +26,10 @@ COPY entrypoint.sh /entrypoint.sh
 CMD [ "bash" ]
 
 ARG CROSS_TRIPLE
+ARG ANDROID_ABI
+
+ENV ANDROID_STL="c++_shared" \
+    CMAKE_TOOLCHAIN_FILE="/ndk/build/cmake/android.toolchain.cmake"
 
 COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
-
-ENV CMAKE_TOOLCHAIN_FILE="/ndk/build/cmake/android.toolchain.cmake"
 
