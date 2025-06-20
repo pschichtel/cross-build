@@ -2,7 +2,7 @@ FROM docker.io/library/alpine:3.21 AS ndk
 
 RUN apk add curl unzip
 
-ARG NDK_VERSION=r26d
+ARG NDK_VERSION=r27c
 RUN curl -o /tmp/ndk.zip "https://dl.google.com/android/repository/android-ndk-${NDK_VERSION}-linux.zip" \
  && unzip -q /tmp/ndk.zip -d /tmp/ \
  && mv "/tmp/android-ndk-${NDK_VERSION}" /ndk \
@@ -21,11 +21,7 @@ ENV ANDROID_NDK_ROOT="/ndk"
 COPY --from=ndk /ndk "${ANDROID_NDK_ROOT}"
 COPY entrypoint.sh /entrypoint.sh
 
-#ENTRYPOINT [ "/entrypoint.sh" ]
-
 CMD [ "bash" ]
 
 ENV CMAKE_TOOLCHAIN_FILE="${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake"
-
-#COPY "conan-profiles/${CROSS_TRIPLE}.ini" /conan-profile.ini
 
